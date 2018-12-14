@@ -3,7 +3,7 @@ import os
 from tokens import KEY, TOKEN, CLIENT
 import Administrative.channel_filter as cf
 import Administrative.user_verification as uv
-
+from Administrative.channel_data import MOD_CHANNEL, AUTHORIZED_SERVER
 
 key = KEY
 token = TOKEN
@@ -16,31 +16,33 @@ async def on_read():
     print("Started")
 
 # TODO: User verification
+# TODO: Deletion of offensive messages.
+
 
 @client.event
 async def on_message(message):
-    # Checks if the message printed is from the original user.
+    server = client.get_server(AUTHORIZED_SERVER)
+
     if message.author != client.user:
         if cf.checkphrase(message):
-            bad_user = str(message.author)
-            caught_phrase = str(message.content)
-            channel = str(message.channel)
-            timestamp = str(message.timestamp)
-            bad_message = bad_user, channel, caught_phrase, timestamp
-            await client.send_message(message.channel, bad_message)
+            await profanity_check(message)
 
-        if message.content[:2] == '.?':
+        if message.content[:2] == '.?' and str(message.author) in list(map(str, server.members)):
             request = message.content[2:]
             if 'verify' in request:
-                uv.verify_user(request.rsplit('/', 1)[-1])
+                await uv.verify_user(request.rsplit('profiles/', 1)[-1], message, client)
             await client.send_message(message.channel, "Prompt seen.")
 
         # await client.send_message(message.channel, message.content[::-1])
 
 
+async def profanity_check(message):
+    bad_user = str(message.author)
+    caught_phrase = str(message.content)
+    channel = str(message.channel)
+    timestamp = str(message.timestamp)
+    bad_message = bad_user, channel, caught_phrase, timestamp
+    await client.send_message(client.get_channel(MOD_CHANNEL), bad_message)
 
 client.run(token)
 
-
-# Sets up the client
-# async def setup()

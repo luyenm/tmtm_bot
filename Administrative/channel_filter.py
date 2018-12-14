@@ -18,7 +18,6 @@ def checkphrase(message):
             processed_word = phrase[:phrase.index(safe_word)] + phrase[len(safe_word) * 2:]
     else:
         processed_word = phrase
-    print(processed_word)
     if any(banned_words in processed_word.replace(' ', '') for banned_words in blacklist.tolist()):
         return 1
     return 0
