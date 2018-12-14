@@ -14,11 +14,16 @@ from Administrative.channel_data import MEMBER_ROLE
 async def verify_user(steam_id64, message, client):
     shortlist = pd.read_csv('Administrative/unverifiedusers.csv')
     user = str(message.author)
+    role = discord.utils.get(message.server.roles, id=MEMBER_ROLE)
+    if role in message.author.roles:
+        await client.send_message(message.channel,
+                                  "You already have the Member role! >:(")
+        return 0
 
     if user in shortlist.loc[:, 'userName'].tolist():
         if await check_credentials(user, shortlist):
-            await assign_role(message, client)
-            shortlist = shortlist[shortlist.userName == user]
+            await assign_role(message, client, role)
+            shortlist = shortlist[shortlist.userName != user]
             shortlist.to_csv('Administrative/unverifiedusers.csv', mode='w', header=False, index=False)
         return 0
 
@@ -65,14 +70,8 @@ async def enter_user(user, token, url):
     entry.to_csv('Administrative/unverifiedusers.csv', mode='a', header=False, index=False)
 
 
-async def assign_role(message, client):
-    role = discord.utils.get(message.server.roles, id=MEMBER_ROLE)
-    print(role)
+async def assign_role(message, client, role):
     try:
-        if role in message.author.roles:
-            await client.send_message(message.channel,
-                                      "You already have the Member role! >:(")
-            return 0
         await client.add_roles(message.author, role)
         await client.send_message(message.channel, "Welcome " + str(message.author) + ", your role has been assigned.")
     except discord.Forbidden:

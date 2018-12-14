@@ -3,11 +3,7 @@ import os
 from tokens import KEY, TOKEN, CLIENT
 import Administrative.channel_filter as cf
 import Administrative.user_verification as uv
-from Administrative.channel_data import MOD_CHANNEL, AUTHORIZED_SERVER
-
-key = KEY
-token = TOKEN
-client_id = CLIENT
+from Administrative.channel_data import MOD_CHANNEL, AUTHORIZED_SERVER, CHECK_IN_CHANNEL
 
 client = ds.Client()
 
@@ -22,7 +18,6 @@ async def on_read():
 @client.event
 async def on_message(message):
     server = client.get_server(AUTHORIZED_SERVER)
-
     if message.author != client.user:
         if cf.checkphrase(message):
             await profanity_check(message)
@@ -30,10 +25,20 @@ async def on_message(message):
         if message.content[:2] == '.?' and str(message.author) in list(map(str, server.members)):
             request = message.content[2:]
             if 'verify' in request:
-                await uv.verify_user(request.rsplit('profiles/', 1)[-1], message, client)
+                    await uv.verify_user(request.rsplit('profiles/', 1)[-1], message, client)
             await client.send_message(message.channel, "Prompt seen.")
 
         # await client.send_message(message.channel, message.content[::-1])
+
+
+@client.event
+async def on_member_join(member):
+    if member.server.id == AUTHORIZED_SERVER:
+        await client.send_message(client.get_channel(CHECK_IN_CHANNEL),
+                                  "Welcome to The Meme Team Marines. To gain access "
+                                  "to the server, please type $$verify <link-to-your-steam-profile>. "
+                                  "If you are not in TMTM at the moment, "
+                                  "please go through the regular application process to join.")
 
 
 async def profanity_check(message):
@@ -44,5 +49,5 @@ async def profanity_check(message):
     bad_message = bad_user, channel, caught_phrase, timestamp
     await client.send_message(client.get_channel(MOD_CHANNEL), bad_message)
 
-client.run(token)
+client.run(TOKEN)
 
