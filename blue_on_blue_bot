@@ -1,0 +1,27 @@
+import discord as ds
+import asyncio
+import os
+from tokens import KEY, TOKEN, CLIENT
+
+key = KEY
+token = TOKEN
+client_id = CLIENT
+
+print(key, token, client_id)
+
+client = ds.Client()
+
+@client.event
+async def on_read():
+    print("Started")
+
+@client.event
+async def on_message(message):
+    if message.author != client.user:
+        await client.send_message(message.channel, message.content[::-1])
+
+client.run(token)
+
+
+# Sets up the client
+# async def setup()
