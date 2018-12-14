@@ -1,13 +1,12 @@
 import discord as ds
-import asyncio
 import os
 from tokens import KEY, TOKEN, CLIENT
+import Administrative.channel_filter as cf
+import time
 
 key = KEY
 token = TOKEN
 client_id = CLIENT
-
-print(key, token, client_id)
 
 client = ds.Client()
 
@@ -15,10 +14,20 @@ client = ds.Client()
 async def on_read():
     print("Started")
 
+#TODO: Word
+
 @client.event
 async def on_message(message):
+    # Checks if the message printed is from the original user.
     if message.author != client.user:
-        await client.send_message(message.channel, message.content[::-1])
+        if cf.checkphrase(message):
+            bad_user = str(message.author)
+            caught_phrase = str(message.content)
+            channel = str(message.channel)
+            timestamp = str(message.timestamp)
+            bad_message = bad_user, channel, caught_phrase, timestamp
+            await client.send_message(message.channel, bad_message)
+        # await client.send_message(message.channel, message.content[::-1])
 
 client.run(token)
 
