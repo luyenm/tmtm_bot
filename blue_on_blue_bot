@@ -3,6 +3,7 @@ import os
 from tokens import KEY, TOKEN, CLIENT
 import Administrative.channel_filter as cf
 import Administrative.user_verification as uv
+import Meme.shitpost as sp
 from Administrative.channel_data import MOD_CHANNEL, AUTHORIZED_SERVER, CHECK_IN_CHANNEL
 
 client = ds.Client()
@@ -28,7 +29,7 @@ async def on_message(message):
                     await uv.verify_user(request.rsplit('profiles/', 1)[-1], message, client)
             await client.send_message(message.channel, "Prompt seen.")
 
-        # await client.send_message(message.channel, message.content[::-1])
+        await sp.get_text(message, client)
 
 
 @client.event
