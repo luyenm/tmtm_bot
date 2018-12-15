@@ -2,7 +2,7 @@ import re
 import pandas as pd
 import numpy as np
 
-data = pd.read_csv('Administrative/dictionary.csv')
+data = pd.read_csv('Administration/dictionary.csv')
 blacklist = data.loc[:, 'BlackList'].dropna()
 whitelist = data.loc[:, 'WhiteList'].dropna()
 
@@ -22,3 +22,4 @@ def checkphrase(message):
         return 1
     return 0
 
+# https://api.imgur.com/3/gallery/album/NXyuO
