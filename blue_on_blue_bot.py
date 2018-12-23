@@ -4,6 +4,7 @@ from tokens import KEY, TOKEN, CLIENT
 import Administration.channel_filter as cf
 import Administration.user_verification as uv
 import Administration.administrative_functions as af
+import Features.secret_santa as ss
 import Meme.shitpost as sp
 from Administration.channel_data import MOD_CHANNEL, AUTHORIZED_SERVER, CHECK_IN_CHANNEL, ADMINISTRATIVE_ROLES,\
     MISSION_MAKER
@@ -39,6 +40,12 @@ async def on_message(message):
             if 'help' in request.lower():
                 await af.infodump(message, client)
                 return
+
+            if ADMINISTRATIVE_ROLES in message.author.roles:
+                if 'register secret santa' in request.lower():
+                    await client.send_message(message.channel, 'WIP')
+                if 'ping op':
+                    await client.send_message(client.get_channel('362288299978784768'), client.get_user_info('134830326789832704').mention + 'come for the op')
         await sp.get_text(message, client)
 
 

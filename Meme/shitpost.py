@@ -9,7 +9,6 @@ async def get_text(message, client):
         if 'stem major btw' in str(message.content.lower()):
             emoji_id = get(client.get_all_emojis(), name='gachiGASM')
             await client.add_reaction(message, emoji_id)
-
     if '┻━┻' in str(message.content.lower()):
         responses = [
             "┬─┬ノ( º _ ºノ) now now...",
