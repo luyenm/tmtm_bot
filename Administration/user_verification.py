@@ -11,21 +11,29 @@ from Administration.channel_data import MEMBER_ROLE
 # This whole process will ask users to enter a command for their steam profiles, upon successful request, the user
 # is stored into a .csv with a token which the bot will check if the user entered their token on their steam accounts
 # TODO: maybe look into implementing an actual database, but idc.
-async def verify_user(steam_id64, message, client):
+async def verify_user(steam_url, message, client):
     shortlist = pd.read_csv('Administration/unverifiedusers.csv', index_col='userName')
     user = str(message.author)
     role = discord.utils.get(message.server.roles, id=MEMBER_ROLE)
-    if role in message.author.roles:
-        await client.send_message(message.channel,
-                                  "You already have the Member role! >:(")
-        return 0
-
     if user in shortlist.index:
         if await check_credentials(user, shortlist):
             await assign_role(message, client, role)
             shortlist = shortlist.drop([user], axis=0)
             shortlist.to_csv('Administration/unverifiedusers.csv', index=['userName', 'steamProfile', 'token'])
         return 0
+
+    steam_id64 = await get_id64(steam_url)
+    if steam_id64 is None:
+        client.send_message(message.channel,
+                            "Invalid URL sent, please give me a proper URL.")
+        return 0
+
+
+    if role in message.author.roles:
+        await client.send_message(message.channel,
+                                  "You already have the Member role! >:(")
+        return 0
+
 
     url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=' + STEAM_API_KEY + '&steamids=' + str(steam_id64)
     res = requests.get(url)
@@ -53,7 +61,8 @@ async def verify_user(steam_id64, message, client):
 
 
 async def check_credentials(user, shortlist):
-    steam_id64 = shortlist.loc[[user], 'steamProfile'].tolist()[0]
+    steam_id64 = shortlist.loc[[user], 'steamProfile'].tolist()
+    print(steam_id64)
     token = shortlist.loc[[user], 'token'].tolist()[0]
     res = requests.get('http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=' + STEAM_API_KEY + '&steamids=' + str(steam_id64))
     user_data = res.json()
@@ -64,6 +73,14 @@ async def check_credentials(user, shortlist):
     else:
         return False
 
+async def get_id64(url):
+    if '/profiles/' in url:
+        return url.split('profiles/', 1)[-1]
+    elif '/id/' in url:
+        req = requests.get('http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=' + STEAM_API_KEY + '&vanityurl=' + url.split('id/', 1)[-1])
+        return req.json()['response']['steamid']
+    else:
+        return None
 
 async def enter_user(user, token, url):
     entry = pd.DataFrame([[user, url, token]], columns=['userName', 'steamProfile', 'token'])
@@ -73,7 +90,7 @@ async def enter_user(user, token, url):
 async def assign_role(message, client, role):
     try:
         await client.add_roles(message.author, role)
-        await client.send_message(message.channel, "Welcome @" + str(message.author) + ", your role has been assigned.")
+        await client.send_message(message.channel, "Welcome " + message.author.mention + ", your role has been assigned.")
     except discord.Forbidden:
         await client.send_message(message.channel, "I lack permissions to assign that role, go bother an admin please")
 
