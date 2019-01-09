@@ -21,7 +21,7 @@ async def on_read():
 async def on_message(message):
     server = client.get_server(AUTHORIZED_SERVER)
     if message.author != client.user:
-        if cf.checkphrase(message, client):
+        if cf.checkphrase(message):
             await profanity_check(message)
             await client.delete_message(message.id)
 

@@ -1,6 +1,5 @@
 import re
 import pandas as pd
-import numpy as np
 
 data = pd.read_csv('Administration/dictionary.csv')
 blacklist = data.loc[:, 'BlackList'].dropna()
