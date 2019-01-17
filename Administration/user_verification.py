@@ -28,6 +28,7 @@ async def verify_user(steam_url, message, client):
                                   "You already have the Member role! >:(")
         return 0
     if await check_group(steam_id64):
+        client.send_message(message.channel, "Checking if you're in the TMTM steam group...")
     else:
         client.send_message(message.channel, "Sorry, you're not a part of this arma group.")
     if user in shortlist.index:
@@ -38,8 +39,7 @@ async def verify_user(steam_url, message, client):
                 shortlist.to_csv('Administration/unverifiedusers.csv', index=['userName', 'steamProfile', 'token'])
             else:
                 client.send_message(message.channel, "Sorry the token does not match what is on your profile.")
-
-        return 0
+            return 0
 
 
     url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=' + STEAM_API_KEY + '&steamids=' + str(steam_id64)
