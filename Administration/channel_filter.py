@@ -1,4 +1,3 @@
-import re
 import pandas as pd
 
 data = pd.read_csv('Administration/dictionary.csv')

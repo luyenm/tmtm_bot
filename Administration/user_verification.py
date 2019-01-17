@@ -1,4 +1,3 @@
-import json
 import discord
 import requests
 from tokens import STEAM_API_KEY
