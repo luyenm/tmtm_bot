@@ -76,6 +76,7 @@ async def check_credentials(user, shortlist):
     token = shortlist.loc[[user], 'token'].tolist()[0]
     res = requests.get('http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=' + STEAM_API_KEY + '&steamids=' + str(steam_id64))
     user_data = res.json()
+    print('checking steam profile...', user_data)
     realname = user_data['response']['players'][0]['realname']
 
     if token in realname:
@@ -100,6 +101,7 @@ async def get_id64(url):
         return url.split('profiles/', 1)[-1]
     elif '/id/' in url:
         req = requests.get('http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=' + STEAM_API_KEY + '&vanityurl=' + url.split('id/', 1)[-1])
+        print('converting URL to to 64 bit steam id...', req.json())
         return req.json()['response']['steamid']
     else:
         return None
