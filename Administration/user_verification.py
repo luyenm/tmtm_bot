@@ -30,7 +30,8 @@ async def verify_user(steam_url, message, client):
     if await check_group(steam_id64):
         await client.send_message(message.channel, "Check successful")
     else:
-        await client.send_message(message.channel, "Sorry, you're not a part of this arma group.")
+        await client.send_message(message.channel, "Sorry, you're not a part of this arma group. You're free to apply "
+                                                   "by sending Anvil an email. musicalanvil@gmail.com.")
     if user in shortlist.index:
 
             if await check_credentials(user, shortlist):
@@ -38,7 +39,7 @@ async def verify_user(steam_url, message, client):
                 shortlist = shortlist.drop([user], axis=0)
                 shortlist.to_csv('Administration/unverifiedusers.csv', index=['userName', 'steamProfile', 'token'])
             else:
-                client.send_message(message.channel, "Sorry the token does not match what is on your profile.")
+                await client.send_message(message.channel, "Sorry the token does not match what is on your profile.")
             return 0
 
 
