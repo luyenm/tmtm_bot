@@ -70,19 +70,19 @@ async def verify_user(steam_url, message, client):
         await client.send_message(message.channel, error_message)
     elif res.status_code == 401:
         await client.send_message(message.channel, "Something's wrong, please ping an admin for a role")
-        await client.send_message('362288299978784768', "Error 403, I access denied to steam")
+        await client.send_message(client.get_channel('362288299978784768'), "Error 403, I access denied to steam")
     elif res.status_code == 402:
         await client.send_message(message.channel, "Something's wrong, please ping an admin for a role")
-        await client.send_message('362288299978784768', "Error 403, I access denied to steam")
+        await client.send_message(client.get_channel('362288299978784768'), "Error 403, I access denied to steam")
     elif res.status_code == 429:
         await client.send_message(message.channel, "I've pissed off gabe newell, please ping an admin for a role")
-        await client.send_message('362288299978784768', "error 429, too many requests")
+        await client.send_message(client.get_channel('362288299978784768'), "error 429, too many requests")
     elif res.status_code == 500:
         await client.send_message(message.channel, "Steam's having some issues, please ping an admin for a role.")
-        await client.send_message('362288299978784768', "Error 500, Steam's having some problems.")
+        await client.send_message(client.get_channel('362288299978784768'), "Error 500, Steam's having some problems.")
     elif res.status_code == 500:
         await client.send_message(message.channel, "Steam's having some issues, please ping an admin for a role.")
-        await client.send_message('362288299978784768', "Error 503, Steam's having some problems.")
+        await client.send_message(client.get_channel('362288299978784768'), "Error 503, Steam's having some problems.")
 
 # Checks the user's steam account to check if they placed the token in their steam profile.
 # returns true or false

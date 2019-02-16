@@ -5,6 +5,9 @@ import Administration.channel_filter as cf
 import Administration.user_verification as uv
 import Administration.administrative_functions as af
 import Meme.shitpost as sp
+import ArmaEvents.missionmaker_functions as mf
+import datetime
+import time
 from Administration.channel_data import MOD_CHANNEL, AUTHORIZED_SERVER, CHECK_IN_CHANNEL, ADMINISTRATIVE_ROLES,\
     MISSION_MAKER
 from Meme.imgurlinks import SMUG
@@ -29,6 +32,7 @@ async def on_message(message):
             request = message.content.replace('.?', '').split()
             request.append(None)
             print(request)
+
             if 'verify' in request:
                 print(message.author, 'request')
                 url = ''
@@ -36,13 +40,16 @@ async def on_message(message):
                     url = request[1]
                 await uv.verify_user(url, message, client)
                 return
-            if 'register mission' in request:
-                if MISSION_MAKER in message.author.roles:
-                    await client.send_message(message.channel, 'Yes queen')
-                else:
-                    await client.send_message(message.channel, 'Sorry, you\'re not special enough '
-                                              + SMUG[random.randint(0, len(SMUG) - 1)])
+
+            if MISSION_MAKER or ADMINISTRATIVE_ROLES in message.author.roles:
+                if 'register op' in request:
+                    await client.send_message(message.channel, message.author.mention + ", you have my attention.")
+                elif 'cancel op' in request:
+                    await client.send_message(message.channel, 'Op Cancelled.')
                 return
+            if 'getnextop' in request:
+                await client.send_message(message.channel, "here's the next upcoming op.")
+
 
             if 'help' in request:
                 await af.infodump(message, client)
