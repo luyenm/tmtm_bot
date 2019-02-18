@@ -50,12 +50,15 @@ async def on_message(message):
                 await af.infodump(message, client)
                 return
 
-            if ADMINISTRATIVE_ROLES in message.author.roles:
+            if message.author.roles in ADMINISTRATIVE_ROLES:
+                print("Admin request")
                 test_user = client.get_user_info('134830326789832704')
                 if 'delete' in request:
                     if request[1] is not None:
                         await af.delete_messages(request[1], message, client)
 
+                if 'test' in request:
+                    await af.genocide(list(map(str, server.members)))
                 if 'register secret santa' in request.lower():
                     await client.send_message(message.channel, 'WIP')
                 if 'ping op' in request.lower:

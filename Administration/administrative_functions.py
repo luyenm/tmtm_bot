@@ -1,4 +1,5 @@
 import pandas as pd
+from Administration.channel_data import DEAD_ROLE, MOD_CHANNEL
 
 async def infodump(message, client):
 
@@ -24,3 +25,10 @@ async def delete_messages(number, message, client):
     await client.delete_messages(messages)
     await client.send_message(client.get_channel(MOD_CHANNEL), message.author.mention + " requested " + number + " deleted messages")
     return
+
+
+# Kills half the server
+async def genocide(server_members):
+    print(server_members)
+    return
+
