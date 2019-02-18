@@ -1,4 +1,4 @@
-
+import pandas as pd
 
 async def infodump(message, client):
 
@@ -8,3 +8,19 @@ async def infodump(message, client):
                                               "\n 1) \"verify\" is used for new discord members to assign the member role."
                                               "\n 2) \"register mission\" is used by map makers, futher implementation is"
                                               "planned.")
+
+
+# Clears the list of unverified users, re-prompts all users in the list to verify their identities.
+async def clear_verifications(message, client):
+    return
+
+
+# Deletes a specified number of messages
+async def delete_messages(number, message, client):
+    messages = []
+    number_of_messages = int(number)
+    async for i in client.logs_from(message.channel, limit=number_of_messages):
+        messages.append(i)
+    await client.delete_messages(messages)
+    await client.send_message(client.get_channel(MOD_CHANNEL), message.author.mention + " requested " + number + " deleted messages")
+    return

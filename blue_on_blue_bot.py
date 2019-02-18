@@ -42,6 +42,8 @@ async def on_message(message):
                 else:
                     await client.send_message(message.channel, 'Sorry, you\'re not special enough '
                                               + SMUG[random.randint(0, len(SMUG) - 1)])
+
+
                 return
 
             if 'help' in request:
@@ -50,10 +52,15 @@ async def on_message(message):
 
             if ADMINISTRATIVE_ROLES in message.author.roles:
                 test_user = client.get_user_info('134830326789832704')
+                if 'delete' in request:
+                    if request[1] is not None:
+                        await af.delete_messages(request[1], message, client)
+
                 if 'register secret santa' in request.lower():
                     await client.send_message(message.channel, 'WIP')
                 if 'ping op' in request.lower:
                     await client.send_message(client.get_channel('278205961762504704'), test_user.mention + ' come for the op')
+            return
 
 
 
