@@ -50,9 +50,8 @@ async def verify_user(steam_url, message, client):
     if res.status_code == 200:
         user_token = "".join(random.sample(string.ascii_letters, 10))
         good_response = "Link checks out, I'll DM what you need to do from here."
-        instructions = "Put this token into the 'real name' section of your steam profile, I'll either get back " \
-                       "to you or you can call me again with .$ verify to confirm that it's really you on steam. Make " \
-                       "sure your profile is set to public! \n" \
+        instructions = "Put this token into the 'real name' section of your steam profile, come back to the " \
+                       "check in section of the discord and type in .? verify once more. \n" \
                        "```" + \
                        user_token + \
                        "```"
