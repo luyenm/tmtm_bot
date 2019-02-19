@@ -1,6 +1,7 @@
 import pandas as pd
 from Administration.channel_data import DEAD_ROLE, MOD_CHANNEL
 
+
 async def infodump(message, client):
 
     await client.send_message(message.author, "Hi there! I'm TMTM's discord bot, developed by Arlios, while I'm still a"

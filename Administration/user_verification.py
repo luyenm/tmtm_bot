@@ -32,6 +32,7 @@ async def verify_user(steam_url, message, client):
     else:
         await client.send_message(message.channel, "Sorry, you're not a part of this arma group. You're free to apply "
                                                    "by sending Anvil an email. musicalanvil@gmail.com.")
+        return
     if user in shortlist.index:
 
             if await check_credentials(user, shortlist):
