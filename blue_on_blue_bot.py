@@ -26,6 +26,7 @@ async def on_message(message):
             await client.delete_message(message.id)
 
         if message.content[:2] == '.?' and str(message.author) in list(map(str, server.members)):
+
             request = message.content.replace('.?', '').split()
             request.append(None)
             print(request)
@@ -50,7 +51,7 @@ async def on_message(message):
                 await af.infodump(message, client)
                 return
 
-            if message.author.roles in ADMINISTRATIVE_ROLES:
+            if any(roles.id in ADMINISTRATIVE_ROLES for roles in message.author.roles):
                 print("Admin request")
                 test_user = client.get_user_info('134830326789832704')
                 if 'delete' in request:
@@ -58,13 +59,8 @@ async def on_message(message):
                         await af.delete_messages(request[1], message, client)
 
                 if 'test' in request:
-                    await af.genocide(list(map(str, server.members)))
-                if 'register secret santa' in request.lower():
-                    await client.send_message(message.channel, 'WIP')
-                if 'ping op' in request.lower:
-                    await client.send_message(client.get_channel('278205961762504704'), test_user.mention + ' come for the op')
+                    await af.genocide(list(server.members), client, message)
             return
-
 
 
         await sp.get_text(message, client)

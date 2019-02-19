@@ -1,6 +1,8 @@
 import pandas as pd
-from Administration.channel_data import DEAD_ROLE, MOD_CHANNEL
-
+import discord
+import asyncio
+from Administration.channel_data import DEAD_ROLE, MOD_CHANNEL, MEMBER_ROLE
+import random
 
 async def infodump(message, client):
 
@@ -29,7 +31,23 @@ async def delete_messages(number, message, client):
 
 
 # Kills half the server
-async def genocide(server_members):
+async def genocide(server_members, client, message):
     print(server_members)
+    print("Number of members in server:", len(server_members))
+    victims = int(len(server_members) / 2)
+    dead_role = discord.utils.get(message.server.roles, id=DEAD_ROLE)
+    for i in range(victims):
+        victim = random.randint(1, int(len(server_members)))
+        dead_boi = await client.get_user_info(server_members[victim].id)
+        print(dead_boi.name, "died")
+        await client.add_role(server_members[victim], dead_role)
+        await asyncio.sleep(2)
+
     return
 
+
+async def revive(server_members, client, message):
+    dead_role = discord.utils.get(message.server.roles, id=DEAD_ROLE)
+    for i in server_members:
+        await client.remove_roles(server_members[i], dead_role)
+    return
