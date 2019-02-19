@@ -53,7 +53,6 @@ async def on_message(message):
 
             if any(roles.id in ADMINISTRATIVE_ROLES for roles in message.author.roles):
                 print("Admin request")
-                test_user = client.get_user_info('134830326789832704')
                 if 'delete' in request:
                     if request[1] is not None:
                         await af.delete_messages(request[1], message, client)
@@ -61,8 +60,6 @@ async def on_message(message):
                 if 'test' in request:
                     await af.genocide(list(server.members), client, message)
             return
-
-
         await sp.get_text(message, client)
 
 
