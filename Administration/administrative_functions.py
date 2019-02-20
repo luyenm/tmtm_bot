@@ -43,8 +43,8 @@ async def genocide(server_members, client, message):
         victim = random.randint(1, int(len(server_members)))
         dead_boi = await client.get_user_info(server_members[victim].id)
         print(dead_boi.name, "died")
-        # await client.add_roles(server_members[victim], dead_role)
-        # await client.remove_role(server_members[victim], member_role)
+        await client.add_roles(server_members[victim], dead_role)
+        await client.remove_role(server_members[victim], member_role)
         await asyncio.sleep(2)
     return
 
