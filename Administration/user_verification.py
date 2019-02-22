@@ -15,7 +15,6 @@ async def verify_user(steam_url, message, client):
     shortlist = pd.read_csv('Administration/unverifiedusers.csv', index_col='userName')
     user = str(message.author)
     role = discord.utils.get(message.server.roles, id=MEMBER_ROLE)
-
     steam_id64 = await get_id64(steam_url)
     if steam_id64 is None:
         await client.send_message(message.channel, "Invalid URL sent, please give me a proper URL.")
@@ -31,7 +30,7 @@ async def verify_user(steam_url, message, client):
     else:
         await client.send_message(message.channel, "Sorry, you're not a part of this arma group. You're free to apply "
                                                    "by sending Anvil an email. musicalanvil@gmail.com.")
-        return 0
+        return
 
     if user in shortlist.index:
 
