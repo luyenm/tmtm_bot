@@ -36,26 +36,27 @@ async def delete_messages(number, message, client):
 async def genocide(server_members, client, message):
     print(server_members)
     print("Number of members in server:", len(server_members))
-    victims = int(len(server_members) / 2)
-    dead_role = discord.utils.get(message.server.roles, id=DEAD_ROLE)
-    member_role = discord.utils.get(message.server.roles, id=MEMBER_ROLE)
-    for i in range(victims):
-        victim = random.randint(1, int(len(server_members)))
-        dead_boi = await client.get_user_info(server_members[victim].id)
-        print(dead_boi.name, "died")
-        await client.add_roles(server_members[victim], dead_role)
-        await client.remove_role(server_members[victim], member_role)
-        await asyncio.sleep(2)
+    await client.send_message(message.channel, "haha xd good meme")
+    # victims = int(len(server_members) / 2)
+    # dead_role = discord.utils.get(message.server.roles, id=DEAD_ROLE)
+    # member_role = discord.utils.get(message.server.roles, id=MEMBER_ROLE)
+    # for i in range(victims):
+    #     victim = random.randint(1, int(len(server_members)))
+    #     dead_boi = await client.get_user_info(server_members[victim].id)
+    #     print(dead_boi.name, "died")
+    #     await client.add_roles(server_members[victim], dead_role)
+    #     await client.remove_role(server_members[victim], member_role)
+    #     await asyncio.sleep(2)
     return
 
 
 # Revives half the server
 # Loops through all members
-async def revive(server_members, client, message):
-    dead_role = discord.utils.get(message.server.roles, id=DEAD_ROLE)
-    member_role = discord.utils.get(message.server.roles, id=MEMBER_ROLE)
-    for i in server_members:
-        if any(roles.id in DEAD_ROLE for roles in server_members[i].roles):
-            await client.add_roles(server_members[i], member_role)
-            await client.remove_roles(server_members[i], dead_role)
-    return
+# async def revive(server_members, client, message):
+#     dead_role = discord.utils.get(message.server.roles, id=DEAD_ROLE)
+#     member_role = discord.utils.get(message.server.roles, id=MEMBER_ROLE)
+#     for i in server_members:
+#         if any(roles.id in DEAD_ROLE for roles in server_members[i].roles):
+#             await client.add_roles(server_members[i], member_role)
+#             await client.remove_roles(server_members[i], dead_role)
+#     return

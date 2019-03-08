@@ -57,7 +57,7 @@ async def on_message(message):
                     if request[1] is not None:
                         await af.delete_messages(request[1], message, client)
 
-                if 'test' in request:
+                if 'snap' in request:
                     await af.genocide(list(server.members), client, message)
             return
         await sp.get_text(message, client)
