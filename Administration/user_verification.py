@@ -15,15 +15,13 @@ async def verify_user(steam_url, message, client):
     shortlist = pd.read_csv('Administration/unverifiedusers.csv', index_col='userName')
     user = str(message.author)
     role = discord.utils.get(message.server.roles, id=MEMBER_ROLE)
-
     steam_id64 = await get_id64(steam_url)
     if steam_id64 is None:
         await client.send_message(message.channel, "Invalid URL sent, please give me a proper URL.")
         return 0
 
     if role in message.author.roles:
-        await client.send_message(message.channel,
-                                  "You already have the Member role! >:(")
+        await client.send_message(message.channel, "You already have the Member role! >:(")
         return 0
 
     await client.send_message(message.channel, "Checking to see if you're in the tmtm steam group...")
@@ -32,6 +30,8 @@ async def verify_user(steam_url, message, client):
     else:
         await client.send_message(message.channel, "Sorry, you're not a part of this arma group. You're free to apply "
                                                    "by sending Anvil an email. musicalanvil@gmail.com.")
+        return
+
     if user in shortlist.index:
 
             if await check_credentials(user, shortlist):
@@ -83,6 +83,7 @@ async def verify_user(steam_url, message, client):
         await client.send_message(message.channel, "Steam's having some issues, please ping an admin for a role.")
         await client.send_message('362288299978784768', "Error 503, Steam's having some problems.")
 
+
 # Checks the user's steam account to check if they placed the token in their steam profile.
 # returns true or false
 async def check_credentials(user, shortlist):
@@ -103,7 +104,11 @@ async def check_credentials(user, shortlist):
 async def check_group(steam_id):
     req = requests.request('GET', 'https://steamcommunity.com/gid/103582791437418110/memberslistxml/?xml=1')
     a = req.content
+    type(a)
     root = etree.fromstring(a)
+    print(root)
+    print("Checking for steam id", steam_id)
+    print(list(root[6]))
     for child in root[6]:
         if child.text == steam_id:
             return True
@@ -113,7 +118,7 @@ async def check_group(steam_id):
 # if the user sent a profile url, makes a steam api call to get the user's actual steam id in base 64.
 async def get_id64(url):
     if '/profiles/' in url:
-        return url.split('profiles/', 1)[-1]
+        return url.split('profiles/', 1)[-1].replace("/", "")
     elif '/id/' in url:
         req = requests.get('https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=' + STEAM_API_KEY + '&vanityurl=' + url.split('id/', 1)[-1])
         print('converting URL to to 64 bit steam id...')
